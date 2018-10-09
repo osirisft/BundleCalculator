@@ -1,5 +1,13 @@
 package main.interfaces;
 
-public interface Order {
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Map;
 
+import exception.IllegalFileContentException;
+import exception.WrongFilePathException;
+
+public interface Order {
+	public Map<String, Integer> extractOrderInfo(String sPath)
+			throws WrongFilePathException, IllegalFileContentException, FileNotFoundException, IOException;
 }

@@ -37,7 +37,7 @@ public class TxtFileSource implements BundleSource {
 			try (Stream<String> oFileStream = Files.lines(oPath)) {
 				aLines = (ArrayList<String>) oFileStream.collect(Collectors.toList());
 				for (String s : aLines) {
-					String sType = this.getBundlType(s);
+					String sType = this.getBundleType(s);
 					HashMap<Integer, Float> mapAmountCost = this.getBundleAmountandCost(s);
 					this.mapBundleCost.put(sType, mapAmountCost);
 				}
@@ -50,7 +50,7 @@ public class TxtFileSource implements BundleSource {
 		return this.mapBundleCost;
 	}
 
-	private String getBundlType(String sLine) {
+	private String getBundleType(String sLine) {
 		String[] aLine = sLine.split("\\|");
 		return aLine[1].trim();
 

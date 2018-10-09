@@ -14,6 +14,9 @@ class BundleCostConfigTest {
 		BundleCostConfig oConfig = new BundleCostConfig();
 		BundleSource oSource = oConfig.getBundleSource("TXT");
 		Assertions.assertTrue(oSource instanceof TxtFileSource);
+
+		oSource = oConfig.getBundleSource("XXX");
+		Assertions.assertTrue(oSource instanceof TxtFileSource);
 	}
 
 }

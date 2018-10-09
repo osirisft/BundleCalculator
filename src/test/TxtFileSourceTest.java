@@ -4,11 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -25,7 +23,6 @@ import main.interfaces.BundleSource;
 class TxtFileSourceTest {
 
 	BundleSource oSource;
-	Path oDefaultPath;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -39,7 +36,6 @@ class TxtFileSourceTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		this.oSource = new TxtFileSource();
-		this.oDefaultPath = Paths.get(".");
 	}
 
 	@AfterEach
@@ -55,11 +51,18 @@ class TxtFileSourceTest {
 
 	@Test
 	void testExtractBundleCostMapping_EmptyFile() {
-		Path oPath = this.generateEmptyFile();
-		try (Stream<String> oStream = Files.lines(oPath)) {
-			Long oCount = oStream.count();
-			Assertions.assertEquals(0, oCount.intValue(), "Empty file should have 0 lengh");
+		Path oPath = UTHelper.generateEmptyFile();
+		try {
+			HashMap<String, HashMap<Integer, Float>> mapBundleCost = (HashMap<String, HashMap<Integer, Float>>) this.oSource
+					.extractBundleCostMapping(oPath.toString());
+			Assertions.assertEquals(0, mapBundleCost.size());
 			Files.delete(oPath);
+		} catch (WrongFilePathException e) {
+			e.printStackTrace();
+		} catch (IllegalFileContentException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -68,7 +71,7 @@ class TxtFileSourceTest {
 	@Test
 	void testExtractBundleCostMapping_FileWithOneCorrectLine() {
 		List<String> oLines = this.generateFileContent(1);
-		Path oPath = this.generateSampleTxtSourceFile(oLines);
+		Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 		try {
 
 			HashMap<String, HashMap<Integer, Float>> mapBundleCost = (HashMap<String, HashMap<Integer, Float>>) this.oSource
@@ -104,7 +107,7 @@ class TxtFileSourceTest {
 	@Test
 	void testExtractBundleCostMapping_FileWithMultipleCorrectLines() {
 		List<String> oLines = this.generateFileContent(3);
-		Path oPath = this.generateSampleTxtSourceFile(oLines);
+		Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 		try {
 
 			HashMap<String, HashMap<Integer, Float>> mapBundleCost = (HashMap<String, HashMap<Integer, Float>>) this.oSource
@@ -144,7 +147,7 @@ class TxtFileSourceTest {
 	void testExtractBundleCostMapping_FileWithIllegalContent() {
 		try {
 			List<String> oLines = this.generateIllegalFileContent();
-			Path oPath = this.generateSampleTxtSourceFile(oLines);
+			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 			Assertions.assertThrows(IllegalFileContentException.class, () -> {
 				this.oSource.extractBundleCostMapping(oPath.toString());
 			});
@@ -187,29 +190,6 @@ class TxtFileSourceTest {
 		String s = "Image | IMG | xxx @ $2 2 @ $3 5 @ $6";
 		oList.add(s);
 		return oList;
-	}
-
-	private Path generateSampleTxtSourceFile(List<String> oLines) {
-		try {
-			Path oPath = Files.createTempFile(this.oDefaultPath, "sampleTxtSource", "txt");
-			oPath = Files.write(oPath, oLines);
-			return oPath;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	private Path generateEmptyFile() {
-
-		try {
-			Path oPath = Files.createTempFile(this.oDefaultPath, "sampleTxtSource", "txt");
-			return oPath;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 }
