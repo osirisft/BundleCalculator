@@ -17,11 +17,16 @@ import main.interfaces.BundleSource;
 
 public class TxtFileSource implements BundleSource {
 
+	private Map<String, HashMap<Integer, Float>> mapBundleCost;
+
+	public TxtFileSource() {
+		this.mapBundleCost = new HashMap<String, HashMap<Integer, Float>>();
+	}
+
 	@Override
 	public Map<String, HashMap<Integer, Float>> extractBundleCostMapping(String sFilePath)
 			throws WrongFilePathException, IllegalFileContentException, FileNotFoundException, IOException {
 
-		Map<String, HashMap<Integer, Float>> mapBundleCost = new HashMap<String, HashMap<Integer, Float>>();
 		Path oPath;
 		ArrayList<String> aLines;
 
@@ -34,11 +39,15 @@ public class TxtFileSource implements BundleSource {
 				for (String s : aLines) {
 					String sType = this.getBundlType(s);
 					HashMap<Integer, Float> mapAmountCost = this.getBundleAmountandCost(s);
-					mapBundleCost.put(sType, mapAmountCost);
+					this.mapBundleCost.put(sType, mapAmountCost);
 				}
 			}
 		}
-		return mapBundleCost;
+		return this.mapBundleCost;
+	}
+
+	public Map<String, HashMap<Integer, Float>> getBuncleCostMapping() {
+		return this.mapBundleCost;
 	}
 
 	private String getBundlType(String sLine) {
