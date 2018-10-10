@@ -10,7 +10,7 @@ import exception.WrongFilePathException;
 
 public interface BundleSource {
 
-	Map<String, HashMap<Integer, Float>> extractBundleCostMapping(String sFilePath)
+	Map<String, HashMap<Integer, Float>> extractBundleCostMapping()
 			throws WrongFilePathException, IllegalFileContentException, FileNotFoundException, IOException;
 
 }

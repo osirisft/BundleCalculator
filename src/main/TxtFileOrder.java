@@ -17,18 +17,25 @@ import main.interfaces.Order;
 
 public class TxtFileOrder implements Order {
 
+	private String sPath;
+
+	public TxtFileOrder(String sPath) {
+		super();
+		this.sPath = sPath;
+	}
+
 	@Override
-	public Map<String, Integer> extractOrderInfo(String sPath)
+	public Map<String, Integer> extractOrderInfo()
 			throws WrongFilePathException, IllegalFileContentException, FileNotFoundException, IOException {
 
 		Map<String, Integer> mapOrder = new HashMap<String, Integer>();
 		Path oPath;
 		ArrayList<String> aLines;
 
-		if (sPath == null) {
+		if (this.sPath == null) {
 			throw new WrongFilePathException();
 		} else {
-			oPath = Paths.get(sPath);
+			oPath = Paths.get(this.sPath);
 			try (Stream<String> oFileStream = Files.lines(oPath)) {
 				aLines = (ArrayList<String>) oFileStream.collect(Collectors.toList());
 				for (String s : aLines) {

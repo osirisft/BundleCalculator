@@ -12,10 +12,10 @@ class BundleCostConfigTest {
 	@Test
 	void testgetBouldeSource_TxtFileSource() {
 		BundleCostConfig oConfig = new BundleCostConfig();
-		BundleSource oSource = oConfig.getBundleSource("TXT");
+		BundleSource oSource = oConfig.getBundleSource("TXT", UTHelper.oDefaultPath.toString());
 		Assertions.assertTrue(oSource instanceof TxtFileSource);
 
-		oSource = oConfig.getBundleSource("XXX");
+		oSource = oConfig.getBundleSource("XXX", UTHelper.oDefaultPath.toString());
 		Assertions.assertTrue(oSource instanceof TxtFileSource);
 	}
 

@@ -35,7 +35,7 @@ class TxtFileSourceTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		this.oSource = new TxtFileSource();
+
 	}
 
 	@AfterEach
@@ -44,17 +44,19 @@ class TxtFileSourceTest {
 
 	@Test
 	void testExtractBundleCostMapping_WithNullFilePath() {
+		this.oSource = new TxtFileSource(null);
 		Assertions.assertThrows(WrongFilePathException.class, () -> {
-			this.oSource.extractBundleCostMapping(null);
+			this.oSource.extractBundleCostMapping();
 		});
 	}
 
 	@Test
 	void testExtractBundleCostMapping_EmptyFile() {
-		Path oPath = UTHelper.generateEmptyFile();
 		try {
+			Path oPath = UTHelper.generateEmptyFile();
+			this.oSource = new TxtFileSource(oPath.toString());
 			HashMap<String, HashMap<Integer, Float>> mapBundleCost = (HashMap<String, HashMap<Integer, Float>>) this.oSource
-					.extractBundleCostMapping(oPath.toString());
+					.extractBundleCostMapping();
 			Assertions.assertEquals(0, mapBundleCost.size());
 			Files.delete(oPath);
 		} catch (WrongFilePathException e) {
@@ -70,12 +72,13 @@ class TxtFileSourceTest {
 
 	@Test
 	void testExtractBundleCostMapping_FileWithOneCorrectLine() {
-		List<String> oLines = this.generateFileContent(1);
-		Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 		try {
+			List<String> oLines = this.generateFileContent(1);
+			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
+			this.oSource = new TxtFileSource(oPath.toString());
 
 			HashMap<String, HashMap<Integer, Float>> mapBundleCost = (HashMap<String, HashMap<Integer, Float>>) this.oSource
-					.extractBundleCostMapping(oPath.toString());
+					.extractBundleCostMapping();
 			Assertions.assertEquals(1, mapBundleCost.keySet().size(),
 					"File contains 1 bundle type should have 1 mapping entry");
 
@@ -106,12 +109,13 @@ class TxtFileSourceTest {
 
 	@Test
 	void testExtractBundleCostMapping_FileWithMultipleCorrectLines() {
-		List<String> oLines = this.generateFileContent(3);
-		Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 		try {
+			List<String> oLines = this.generateFileContent(3);
+			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
+			this.oSource = new TxtFileSource(oPath.toString());
 
 			HashMap<String, HashMap<Integer, Float>> mapBundleCost = (HashMap<String, HashMap<Integer, Float>>) this.oSource
-					.extractBundleCostMapping(oPath.toString());
+					.extractBundleCostMapping();
 			Assertions.assertEquals(3, mapBundleCost.keySet().size());
 
 			HashMap<Integer, Float> mapAmountCostMapping = mapBundleCost.get("IMG");
@@ -148,8 +152,9 @@ class TxtFileSourceTest {
 		try {
 			List<String> oLines = this.generateIllegalFileContent();
 			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
+			this.oSource = new TxtFileSource(oPath.toString());
 			Assertions.assertThrows(IllegalFileContentException.class, () -> {
-				this.oSource.extractBundleCostMapping(oPath.toString());
+				this.oSource.extractBundleCostMapping();
 			});
 			Files.delete(oPath);
 		} catch (IOException e) {

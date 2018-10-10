@@ -8,6 +8,6 @@ import exception.IllegalFileContentException;
 import exception.WrongFilePathException;
 
 public interface Order {
-	public Map<String, Integer> extractOrderInfo(String sPath)
+	public Map<String, Integer> extractOrderInfo()
 			throws WrongFilePathException, IllegalFileContentException, FileNotFoundException, IOException;
 }

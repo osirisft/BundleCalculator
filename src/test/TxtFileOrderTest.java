@@ -33,7 +33,6 @@ class TxtFileOrderTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		this.oOrder = new TxtFileOrder();
 	}
 
 	@AfterEach
@@ -42,10 +41,10 @@ class TxtFileOrderTest {
 
 	@Test
 	void testExtractOrderInfo_EmptyOrderContent() {
-		Path oPath = UTHelper.generateEmptyFile();
 		try {
-			HashMap<String, Integer> mapOrder = (HashMap<String, Integer>) this.oOrder
-					.extractOrderInfo(oPath.toString());
+			Path oPath = UTHelper.generateEmptyFile();
+			this.oOrder = new TxtFileOrder(oPath.toString());
+			HashMap<String, Integer> mapOrder = (HashMap<String, Integer>) this.oOrder.extractOrderInfo();
 			Assertions.assertEquals(0, mapOrder.size());
 			Files.delete(oPath);
 		} catch (WrongFilePathException e) {
@@ -61,19 +60,19 @@ class TxtFileOrderTest {
 
 	@Test
 	void testExtractOrderInfo_WrongFOrderFilePath() {
+		this.oOrder = new TxtFileOrder(null);
 		Assertions.assertThrows(WrongFilePathException.class, () -> {
-			this.oOrder.extractOrderInfo(null);
+			this.oOrder.extractOrderInfo();
 		});
 	}
 
 	@Test
 	void testExtractOrderInfo_CorrectOrderContentOneLine() {
-		List<String> oLines = this.generateFileContent(1);
-		Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 		try {
-
-			HashMap<String, Integer> mapOrder = (HashMap<String, Integer>) this.oOrder
-					.extractOrderInfo(oPath.toString());
+			List<String> oLines = this.generateFileContent(1);
+			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
+			this.oOrder = new TxtFileOrder(oPath.toString());
+			HashMap<String, Integer> mapOrder = (HashMap<String, Integer>) this.oOrder.extractOrderInfo();
 			Assertions.assertEquals(1, mapOrder.size(), "File contains 1 bundle type should have 1 mapping entry");
 
 			Integer oAmount = mapOrder.get("IMG");
@@ -93,12 +92,11 @@ class TxtFileOrderTest {
 
 	@Test
 	void testExtractOrderInfo_CorrectOrderContentMultipleLine() {
-		List<String> oLines = this.generateFileContent(3);
-		Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
 		try {
-
-			HashMap<String, Integer> mapOrder = (HashMap<String, Integer>) this.oOrder
-					.extractOrderInfo(oPath.toString());
+			List<String> oLines = this.generateFileContent(3);
+			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
+			this.oOrder = new TxtFileOrder(oPath.toString());
+			HashMap<String, Integer> mapOrder = (HashMap<String, Integer>) this.oOrder.extractOrderInfo();
 			Assertions.assertEquals(3, mapOrder.size());
 
 			Integer oAmount = mapOrder.get("IMG");
@@ -127,8 +125,9 @@ class TxtFileOrderTest {
 		try {
 			List<String> oLines = this.generateIllegalFileContent();
 			Path oPath = UTHelper.generateSampleTxtSourceFile(oLines);
+			this.oOrder = new TxtFileOrder(oPath.toString());
 			Assertions.assertThrows(IllegalFileContentException.class, () -> {
-				this.oOrder.extractOrderInfo(oPath.toString());
+				this.oOrder.extractOrderInfo();
 			});
 			Files.delete(oPath);
 		} catch (IOException e) {

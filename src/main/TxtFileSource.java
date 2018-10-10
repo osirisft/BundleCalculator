@@ -18,22 +18,24 @@ import main.interfaces.BundleSource;
 public class TxtFileSource implements BundleSource {
 
 	private Map<String, HashMap<Integer, Float>> mapBundleCost;
+	private String sPath;
 
-	public TxtFileSource() {
+	public TxtFileSource(String sFilePath) {
+		this.sPath = sFilePath;
 		this.mapBundleCost = new HashMap<String, HashMap<Integer, Float>>();
 	}
 
 	@Override
-	public Map<String, HashMap<Integer, Float>> extractBundleCostMapping(String sFilePath)
+	public Map<String, HashMap<Integer, Float>> extractBundleCostMapping()
 			throws WrongFilePathException, IllegalFileContentException, FileNotFoundException, IOException {
 
 		Path oPath;
 		ArrayList<String> aLines;
 
-		if (sFilePath == null) {
+		if (this.sPath == null) {
 			throw new WrongFilePathException();
 		} else {
-			oPath = Paths.get(sFilePath);
+			oPath = Paths.get(this.sPath);
 			try (Stream<String> oFileStream = Files.lines(oPath)) {
 				aLines = (ArrayList<String>) oFileStream.collect(Collectors.toList());
 				for (String s : aLines) {
