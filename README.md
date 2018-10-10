@@ -7,13 +7,13 @@ Social media Influencers have been basing the price of their social media post o
 ## Usage:
 
 1. Create a txt file on your disk and input the bundle cost plan
-![Alt text](/designDoc/screenShot/1.png)  
-
-2. Create a txt file on your disk and input the order data
 ![Alt text](/designDoc/screenShot/2.png)  
 
-3. Run Java Application "BundleCalculator"
+2. Create a txt file on your disk and input the order data
 ![Alt text](/designDoc/screenShot/3.png)  
+
+3. Run Java Application "BundleCalculator"
+![Alt text](/designDoc/screenShot/1.png)  
 
 4. Input command "upload <XXX\XXX.txt>" and press "Enter". <XXX\XXX.txt> is the bundle cost file path and file name you have created in step 1
 ![Alt text](/designDoc/screenShot/4.png)  
