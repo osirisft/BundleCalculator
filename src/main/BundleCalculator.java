@@ -102,7 +102,7 @@ public class BundleCalculator {
 				"For uploading Bundle Cost List, please input \"upload\" with the file path and press \"Enter\";");
 		System.out.println(
 				"For calculate bundle compostion, please input \"cal\" with the or file path and press \"Enter\";");
-
+		System.out.println("");
 		String sCommand, sSourcePath = "";
 		boolean bIsUploaded = false;
 		BundleSource oSource;
@@ -118,6 +118,7 @@ public class BundleCalculator {
 					sSourcePath = aStr[1];
 					bIsUploaded = true;
 					System.out.println("Bundle Cost Files is uploaded");
+					System.out.println("");
 				} else {
 					if (aStr[0].toLowerCase().equals("cal") && bIsUploaded == true) {
 						oOrder = new TxtFileOrder(aStr[1]);
