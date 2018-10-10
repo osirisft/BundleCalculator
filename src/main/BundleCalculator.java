@@ -1,7 +1,9 @@
 package main;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -11,6 +13,7 @@ import java.util.Set;
 import exception.IllegalFileContentException;
 import exception.WrongFilePathException;
 import main.interfaces.BundleSource;
+import main.interfaces.CalculationResult;
 import main.interfaces.Order;
 
 public class BundleCalculator {
@@ -95,7 +98,44 @@ public class BundleCalculator {
 	}
 
 	public static void main(String[] args) {
+		System.out.println(
+				"For uploading Bundle Cost List, please input \"upload\" with the file path and press \"Enter\";");
+		System.out.println(
+				"For calculate bundle compostion, please input \"cal\" with the or file path and press \"Enter\";");
 
+		String sCommand, sSourcePath = "";
+		boolean bIsUploaded = false;
+		BundleSource oSource;
+		Order oOrder;
+
+		while (true) {
+			try {
+				BufferedReader oReader = new BufferedReader(new InputStreamReader(System.in));
+				sCommand = oReader.readLine();
+				String[] aStr = sCommand.split(" ");
+
+				if (aStr[0].toLowerCase().equals("upload")) {
+					sSourcePath = aStr[1];
+					bIsUploaded = true;
+					System.out.println("Bundle Cost Files is uploaded");
+				} else {
+					if (aStr[0].toLowerCase().equals("cal") && bIsUploaded == true) {
+						oOrder = new TxtFileOrder(aStr[1]);
+						BundleCostConfig oConfig = new BundleCostConfig();
+						oSource = oConfig.getBundleSource("TXT", sSourcePath);
+						BundleCalculator oCal = new BundleCalculator(oOrder, oSource);
+						Map<String, HashMap<Integer, Integer>> mapResult = oCal.calculateCost();
+						CalculationResult oOutput = new CommandLineOutput();
+						oOutput.displayResult(mapResult);
+
+					}
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 }
